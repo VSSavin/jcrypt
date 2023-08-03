@@ -63,8 +63,11 @@ public class JavaJsJCryptRSA extends JsJCryptEngine {
             encryptCipher = Cipher.getInstance("RSA/ECB/OAEPWITHSHA-256ANDMGF1PADDING");
             EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(Base64.getDecoder().decode(key.getBytes()));
             PublicKey publicKey = keyFactory.generatePublic(publicKeySpec);
-            encryptCipher.init(Cipher.ENCRYPT_MODE, publicKey);
-            byte[] encryptedBytes = encryptCipher.doFinal(message.getBytes());
+            byte[] encryptedBytes;
+            synchronized (encryptCipher) {
+                encryptCipher.init(Cipher.ENCRYPT_MODE, publicKey);
+                encryptedBytes = encryptCipher.doFinal(message.getBytes());
+            }
             byte[] base64 = Base64.getEncoder().encode(encryptedBytes);
             Arrays.fill(encryptedBytes, (byte) 0);
             encrypted = new String(base64);
@@ -84,16 +87,12 @@ public class JavaJsJCryptRSA extends JsJCryptEngine {
             byte[] privateKeyBytes = Base64.getDecoder().decode(key.getBytes());
             EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(privateKeyBytes);
             PrivateKey privateKey = keyFactory.generatePrivate(privateKeySpec);
-            synchronized (rsaCipher) {
-                rsaCipher.init(Cipher.DECRYPT_MODE, privateKey);
-            }
-
             byte[] base64 = Base64.getDecoder().decode(encrypted.getBytes());
             byte[] decryptedBytes;
             synchronized (rsaCipher) {
+                rsaCipher.init(Cipher.DECRYPT_MODE, privateKey);
                 decryptedBytes = rsaCipher.doFinal(base64);
             }
-
             Arrays.fill(base64, (byte) 0);
             decrypted = new String(decryptedBytes);
             Arrays.fill(decryptedBytes, (byte) 0);
