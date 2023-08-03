@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -21,6 +22,10 @@ import java.util.Objects;
 public abstract class JsJCryptEngine implements JCrypt, JsCryptCompatible {
     protected final ScriptEngine engine = new ScriptEngineManager().getEngineByExtension("js");
     protected final StringSafety stringSafety;
+
+    protected List<String> scriptsList = new ArrayList<>();
+
+    private final List<String> phantomScriptsList = new ArrayList<>();
 
     protected JsJCryptEngine(StringSafety stringSafety) {
         this.stringSafety = stringSafety;
@@ -34,6 +39,10 @@ public abstract class JsJCryptEngine implements JCrypt, JsCryptCompatible {
                 throw new JsEngineInitException("Evaluating js script error!", e);
             }
         }
+    }
+
+    protected void addPhantomScript(String script) {
+        phantomScriptsList.add(script);
     }
 
     protected List<String> getJavaScriptsListFromResources() {
@@ -58,9 +67,9 @@ public abstract class JsJCryptEngine implements JCrypt, JsCryptCompatible {
     }
 
     protected void loadScriptsFromResources() {
-        List<String> scripts = getJavaScriptsListFromResources();
+        scriptsList = getJavaScriptsListFromResources();
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        for (String script : scripts) {
+        for (String script : scriptsList) {
             try (InputStream is = classLoader.getResourceAsStream(script);
                  BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
                 synchronized (engine) {
@@ -136,5 +145,12 @@ public abstract class JsJCryptEngine implements JCrypt, JsCryptCompatible {
         }
 
         return decrypted;
+    }
+
+    @Override
+    public List<String> getScriptsList() {
+        List<String> result = new ArrayList<>(scriptsList);
+        result.addAll(phantomScriptsList);
+        return Collections.unmodifiableList(result);
     }
 }
