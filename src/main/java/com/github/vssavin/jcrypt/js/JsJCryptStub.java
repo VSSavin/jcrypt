@@ -7,7 +7,7 @@ import com.github.vssavin.jcrypt.StringSafety;
  */
 public class JsJCryptStub extends JsJCryptEngine {
 
-    protected JsJCryptStub(StringSafety stringSafety) {
+    public JsJCryptStub(StringSafety stringSafety) {
         super(stringSafety);
     }
 
