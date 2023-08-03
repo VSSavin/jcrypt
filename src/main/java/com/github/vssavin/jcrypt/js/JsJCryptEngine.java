@@ -148,6 +148,16 @@ public abstract class JsJCryptEngine implements JCrypt, JsCryptCompatible {
     }
 
     @Override
+    public String encrypt(String message) {
+        throw new UnsupportedOperationException("Not implemented!");
+    }
+
+    @Override
+    public String decrypt(String encrypted) {
+        throw new UnsupportedOperationException("Not implemented!");
+    }
+
+    @Override
     public List<String> getScriptsList() {
         List<String> result = new ArrayList<>(scriptsList);
         result.addAll(phantomScriptsList);

@@ -6,4 +6,6 @@ package com.github.vssavin.jcrypt;
 public interface JCrypt {
     String encrypt(String message, String key);
     String decrypt(String encrypted, String key);
+    String encrypt(String message);
+    String decrypt(String encrypted);
 }
