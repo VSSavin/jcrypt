@@ -10,7 +10,10 @@ public class DefaultStringSafety implements StringSafety {
 
     @Override
     public void clearString(String str) {
-        if(str == null) return;
+        if (str == null) {
+            return;
+        }
+
         try {
             Field stringChars = String.class.getDeclaredField("value");
             setFieldAccessible(stringChars);
