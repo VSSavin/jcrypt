@@ -6,24 +6,23 @@ import java.util.Date;
  * @author vssavin on 04.08.2023
  */
 class KeyParams {
-    private static final int EXPIRATION_KEY_SECONDS = 60;
     private final String id;
     private final String publicKey;
     private final String privateKey;
     private final Date expiration;
 
-    KeyParams(String id, String publicKey) {
+    KeyParams(String id, String publicKey, int expirationKeySeconds) {
         this.id = id;
         this.publicKey = publicKey;
         this.privateKey = publicKey;
-        this.expiration = new Date(System.currentTimeMillis() + EXPIRATION_KEY_SECONDS * 1000L);
+        this.expiration = new Date(System.currentTimeMillis() + expirationKeySeconds * 1000L);
     }
 
-    KeyParams(String id, String publicKey, String privateKey) {
+    KeyParams(String id, String publicKey, String privateKey, int expirationKeySeconds) {
         this.id = id;
         this.publicKey = publicKey;
         this.privateKey = privateKey;
-        this.expiration = new Date(System.currentTimeMillis() + EXPIRATION_KEY_SECONDS * 1000L);
+        this.expiration = new Date(System.currentTimeMillis() + expirationKeySeconds * 1000L);
     }
 
     boolean isExpired() {

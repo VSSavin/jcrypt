@@ -10,7 +10,18 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author vssavin on 04.08.2023
  */
 public class AESKeyStorage implements JKeyStorage {
+    private static final int DEFAULT_EXPIRATION_KEY_SECONDS = 60;
     private static final Map<String, KeyParams> cache = new ConcurrentHashMap<>();
+
+    private final int expirationKeySeconds;
+
+    public AESKeyStorage() {
+        this.expirationKeySeconds = DEFAULT_EXPIRATION_KEY_SECONDS;
+    }
+
+    public AESKeyStorage(int expirationKeySeconds) {
+        this.expirationKeySeconds = expirationKeySeconds;
+    }
 
     @Override
     public String getPublicKey() {
@@ -23,7 +34,7 @@ public class AESKeyStorage implements JKeyStorage {
         String uuid;
         if (keyParams == null || keyParams.isExpired()) {
             uuid = UUID.randomUUID().toString().replace("-", "");
-            keyParams = new KeyParams(id, uuid);
+            keyParams = new KeyParams(id, uuid, expirationKeySeconds);
             cache.put(id, keyParams);
         } else {
             uuid = keyParams.getPublicKey();

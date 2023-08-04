@@ -15,16 +15,23 @@ import java.util.stream.Collectors;
  * @author vssavin on 04.08.2023
  */
 public class RSAKeyStorage implements JKeyStorage {
+    private static final int DEFAULT_EXPIRATION_KEY_SECONDS = 60;
     private static final Map<String, KeyParams> cache = new ConcurrentHashMap<>();
 
     private final KeyPairGenerator keyPairGenerator;
+    private final int expirationKeySeconds;
 
-    public RSAKeyStorage() {
+    public RSAKeyStorage(int expirationKeySeconds) {
+        this.expirationKeySeconds = expirationKeySeconds;
         try {
             keyPairGenerator = KeyPairGenerator.getInstance("RSA");
         } catch (NoSuchAlgorithmException e) {
             throw new KeyStorageInitializeException("No such algorithm!", e);
         }
+    }
+
+    public RSAKeyStorage() {
+        this(DEFAULT_EXPIRATION_KEY_SECONDS);
     }
 
     @Override
@@ -44,7 +51,7 @@ public class RSAKeyStorage implements JKeyStorage {
                 byte[] privateKeyBytes = pair.getPrivate().getEncoded();
                 publicKey = Base64.getEncoder().encodeToString(publicKeyBytes);
                 String privateKey = Base64.getEncoder().encodeToString(privateKeyBytes);
-                keyParams = new KeyParams(id, publicKey, privateKey);
+                keyParams = new KeyParams(id, publicKey, privateKey, expirationKeySeconds);
                 cache.put(id, keyParams);
             } catch (Exception e) {
                 throw new KeyStorageInitKeyException("Getting key error!", e);
