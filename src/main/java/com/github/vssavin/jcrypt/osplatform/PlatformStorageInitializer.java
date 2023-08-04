@@ -37,7 +37,7 @@ public final class PlatformStorageInitializer {
             }
         }
 
-        if (!(platformSecurity instanceof DefaultPlatformStorage) && platformSecurity.getKey().isEmpty()) {
+        if (!(platformSecurity instanceof DefaultPlatformStorage) && platformSecurity.getPublicKey().isEmpty()) {
             platformSecurity = new DefaultPlatformStorage();
         }
 

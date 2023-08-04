@@ -11,7 +11,7 @@ public class OSPlatformCryptTest {
     public void defaultPlatformStorageTest() {
         String message = "test message";
         JKeyStorage platformStorage = new DefaultPlatformStorage();
-        String key = platformStorage.getKey();
+        String key = platformStorage.getPublicKey();
         JCrypt storageSecure = new OSPlatformCrypt();
         String encrypted = storageSecure.encrypt(message, key);
         String decrypted = storageSecure.decrypt(encrypted, key);
@@ -26,10 +26,10 @@ public class OSPlatformCryptTest {
         String key;
         try {
             platformStorage = new WindowsPlatformStorage();
-            key = platformStorage.getKey();
+            key = platformStorage.getPublicKey();
         } catch (PlatformInitException e) {
             platformStorage = new DefaultPlatformStorage();
-            key = platformStorage.getKey();
+            key = platformStorage.getPublicKey();
         }
 
         JCrypt storageSecure = new OSPlatformCrypt();
@@ -46,10 +46,10 @@ public class OSPlatformCryptTest {
         String key;
         try {
             platformStorage = new LinuxPlatformStorage();
-            key = platformStorage.getKey();
+            key = platformStorage.getPublicKey();
         } catch (PlatformInitException e) {
             platformStorage = new DefaultPlatformStorage();
-            key = platformStorage.getKey();
+            key = platformStorage.getPublicKey();
         }
 
         JCrypt storageSecure = new OSPlatformCrypt();

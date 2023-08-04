@@ -51,7 +51,7 @@ public class OSPlatformCrypt implements JCrypt {
 
     private void prepare() {
         JKeyStorage platformStorage = PlatformStorageInitializer.getPlatformStorage();
-        String key = platformStorage.getKey();
+        String key = platformStorage.getPublicKey();
         if (key.isEmpty()) {
             String message = String.format("Error while getting platform security key [%s]", platformStorage);
             throw new IllegalStateException(message);

@@ -20,7 +20,7 @@ class WindowsPlatformStorage implements JKeyStorage {
     }
 
     @Override
-    public String getKey() {
+    public String getPublicKey() {
         String key = DEFAULT_KEY;
         try {
             String line;
@@ -41,7 +41,17 @@ class WindowsPlatformStorage implements JKeyStorage {
     }
 
     @Override
-    public String getKey(String id) {
+    public String getPublicKey(String id) {
         throw new UnsupportedOperationException("Not implemented!");
+    }
+
+    @Override
+    public String getPrivateKey() {
+        return getPublicKey();
+    }
+
+    @Override
+    public String getPrivateKey(String id) {
+        return getPublicKey(id);
     }
 }

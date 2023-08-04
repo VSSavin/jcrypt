@@ -29,7 +29,7 @@ class DefaultPlatformStorage implements JKeyStorage {
     }
 
     @Override
-    public String getKey() {
+    public String getPublicKey() {
         String key;
         try {
             Set<String> ids = getNetworkIds();
@@ -50,8 +50,18 @@ class DefaultPlatformStorage implements JKeyStorage {
     }
 
     @Override
-    public String getKey(String id) {
+    public String getPublicKey(String id) {
         throw new UnsupportedOperationException("Not implemented!");
+    }
+
+    @Override
+    public String getPrivateKey() {
+        return getPublicKey();
+    }
+
+    @Override
+    public String getPrivateKey(String id) {
+        return getPublicKey(id);
     }
 
     private Set<String> getNetworkIds() throws SocketException {
