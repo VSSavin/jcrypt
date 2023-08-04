@@ -1,5 +1,6 @@
 package com.github.vssavin.jcrypt.js;
 
+import com.github.vssavin.jcrypt.DefaultStringSafety;
 import com.github.vssavin.jcrypt.StringSafety;
 
 import javax.crypto.BadPaddingException;
@@ -48,6 +49,10 @@ public class JavaJsJCryptRSA extends JsJCryptEngine {
         }
 
         keyFactory = keyFactory1;
+    }
+
+    public JavaJsJCryptRSA() {
+        this(new DefaultStringSafety());
     }
 
     @Override

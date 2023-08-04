@@ -1,5 +1,6 @@
 package com.github.vssavin.jcrypt.js;
 
+import com.github.vssavin.jcrypt.DefaultStringSafety;
 import com.github.vssavin.jcrypt.JCrypt;
 import com.github.vssavin.jcrypt.StringSafety;
 
@@ -29,6 +30,14 @@ public abstract class JsJCryptEngine implements JCrypt, JsCryptCompatible {
 
     protected JsJCryptEngine(StringSafety stringSafety) {
         this.stringSafety = stringSafety;
+        init();
+    }
+
+    protected JsJCryptEngine() {
+        this.stringSafety = new DefaultStringSafety();
+    }
+
+    private void init() {
         loadScriptsFromResources();
         for (String script : getAdditionalScripts()) {
             try {

@@ -1,5 +1,6 @@
 package com.github.vssavin.jcrypt.js;
 
+import com.github.vssavin.jcrypt.DefaultStringSafety;
 import com.github.vssavin.jcrypt.StringSafety;
 
 import java.util.List;
@@ -11,6 +12,10 @@ public class JsJCryptAES extends JsJCryptEngine {
 
     public JsJCryptAES(StringSafety stringSafety) {
         super(stringSafety);
+    }
+
+    public JsJCryptAES() {
+        this(new DefaultStringSafety());
     }
 
     @Override

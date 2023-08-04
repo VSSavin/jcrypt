@@ -11,6 +11,10 @@ public class JsJCryptStub extends JsJCryptEngine {
         super(stringSafety);
     }
 
+    public JsJCryptStub() {
+        super();
+    }
+
     @Override
     public String getEncryptMethodName() {
         return "encodeNOSECURE";
