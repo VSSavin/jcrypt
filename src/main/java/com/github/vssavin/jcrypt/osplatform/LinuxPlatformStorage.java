@@ -13,7 +13,7 @@ class LinuxPlatformStorage implements JKeyStorage {
 
     @Override
     public String getKey() {
-        String security = DEFAULT_KEY;
+        String key = DEFAULT_KEY;
         try {
             String line;
             Process process = Runtime.getRuntime()
@@ -22,7 +22,7 @@ class LinuxPlatformStorage implements JKeyStorage {
             while ((line = in.readLine()) != null) {
                 if (line.toUpperCase().contains("ID_SERIAL_SHORT")) {
                     String[] strings = line.split("=");
-                    security = strings[1];
+                    key = strings[1];
                     break;
                 }
             }
@@ -30,7 +30,7 @@ class LinuxPlatformStorage implements JKeyStorage {
         } catch (Exception e) {
             throw new PlatformInitKeyException("Error while getting WindowsSecurity!", e);
         }
-        return security;
+        return key;
     }
 
     @Override

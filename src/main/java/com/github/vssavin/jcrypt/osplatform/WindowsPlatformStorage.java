@@ -21,7 +21,7 @@ class WindowsPlatformStorage implements JKeyStorage {
 
     @Override
     public String getKey() {
-        String security = DEFAULT_KEY;
+        String key = DEFAULT_KEY;
         try {
             String line;
             Process process = Runtime.getRuntime()
@@ -30,14 +30,14 @@ class WindowsPlatformStorage implements JKeyStorage {
             while ((line = in.readLine()) != null) {
                 if (line.toLowerCase().contains("serial number")) {
                     String[] strings = line.split(" ");
-                    security = strings[strings.length - 1];
+                    key = strings[strings.length - 1];
                 }
             }
             in.close();
         } catch (Exception e) {
             throw new PlatformInitException("Error while getting WindowsSecurity!", e);
         }
-        return security;
+        return key;
     }
 
     @Override
