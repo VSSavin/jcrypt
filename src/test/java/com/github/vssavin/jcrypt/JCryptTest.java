@@ -3,6 +3,8 @@ package com.github.vssavin.jcrypt;
 import com.github.vssavin.jcrypt.js.JavaJsJCryptRSA;
 import com.github.vssavin.jcrypt.js.JsJCryptAES;
 import com.github.vssavin.jcrypt.js.JsJCryptStub;
+import com.github.vssavin.jcrypt.keystorage.AESKeyStorage;
+import com.github.vssavin.jcrypt.keystorage.RSAKeyStorage;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -23,34 +25,33 @@ public class JCryptTest {
         JCrypt aes = new JsJCryptAES(str -> {
         });
 
+        JKeyStorage keyStorage = new AESKeyStorage();
+
         String sourceMessage = "Test message";
-        String key = UUID.randomUUID().toString().replace("-", "");
-        String encrypted = aes.encrypt(sourceMessage, key);
+        String publicKey = keyStorage.getPublicKey("id");
+        String encrypted = aes.encrypt(sourceMessage, publicKey);
         Assert.assertNotEquals(encrypted, sourceMessage);
 
-        String decrypted = aes.decrypt(encrypted, key);
+        String privateKey = keyStorage.getPrivateKey("id");
+        String decrypted = aes.decrypt(encrypted, privateKey);
         Assert.assertNotEquals(encrypted, decrypted);
         Assert.assertEquals(sourceMessage, decrypted);
     }
 
     @Test
-    public void rsaEncryptDecryptTest() throws NoSuchAlgorithmException {
+    public void rsaEncryptDecryptTest() {
         JCrypt rsa = new JavaJsJCryptRSA(str -> {
         });
 
-        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
-        keyPairGenerator.initialize(2048);
-        KeyPair pair = keyPairGenerator.generateKeyPair();
-        byte[] publicKeyBytes = pair.getPublic().getEncoded();
-        byte[] privateKeyBytes = pair.getPrivate().getEncoded();
+        JKeyStorage keyStorage = new RSAKeyStorage();
 
         String sourceMessage = "Test message";
-        String key = Base64.getEncoder().encodeToString(publicKeyBytes);
-        String encrypted = rsa.encrypt(sourceMessage, key);
+        String publicKey = keyStorage.getPublicKey("id");
+        String encrypted = rsa.encrypt(sourceMessage, publicKey);
         Assert.assertNotEquals(encrypted, sourceMessage);
 
-        key = Base64.getEncoder().encodeToString(privateKeyBytes);
-        String decrypted = rsa.decrypt(encrypted, key);
+        String privateKey = keyStorage.getPrivateKey("id");
+        String decrypted = rsa.decrypt(encrypted, privateKey);
         Assert.assertNotEquals(encrypted, decrypted);
         Assert.assertEquals(sourceMessage, decrypted);
     }
