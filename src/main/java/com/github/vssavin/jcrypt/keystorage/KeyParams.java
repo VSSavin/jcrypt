@@ -9,12 +9,14 @@ class KeyParams {
     private final String id;
     private final String publicKey;
     private final String privateKey;
-    private final Date expiration;
+    private final int expirationKeySeconds;
+    private Date expiration;
 
     KeyParams(String id, String publicKey, int expirationKeySeconds) {
         this.id = id;
         this.publicKey = publicKey;
         this.privateKey = publicKey;
+        this.expirationKeySeconds = expirationKeySeconds;
         this.expiration = new Date(System.currentTimeMillis() + expirationKeySeconds * 1000L);
     }
 
@@ -22,6 +24,7 @@ class KeyParams {
         this.id = id;
         this.publicKey = publicKey;
         this.privateKey = privateKey;
+        this.expirationKeySeconds = expirationKeySeconds;
         this.expiration = new Date(System.currentTimeMillis() + expirationKeySeconds * 1000L);
     }
 
@@ -30,11 +33,17 @@ class KeyParams {
     }
 
     String getPublicKey() {
+        refreshExpiration();
         return publicKey;
     }
 
     public String getPrivateKey() {
+        refreshExpiration();
         return privateKey;
+    }
+
+    private void refreshExpiration() {
+        this.expiration = new Date(System.currentTimeMillis() + expirationKeySeconds * 1000L);
     }
 
     @Override
