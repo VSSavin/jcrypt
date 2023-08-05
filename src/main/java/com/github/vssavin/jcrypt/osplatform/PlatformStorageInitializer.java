@@ -73,7 +73,6 @@ public final class PlatformStorageInitializer {
     private static List<Class<?>> getClasses()
             throws ClassNotFoundException, IOException {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        assert classLoader != null;
         String packageName = PlatformStorageInitializer.class.getPackage().getName();
         String path = packageName.replace('.', '/');
         Enumeration<URL> resources = classLoader.getResources(path);
@@ -98,7 +97,6 @@ public final class PlatformStorageInitializer {
         if (files != null) {
             for (File file : files) {
                 if (file.isDirectory()) {
-                    assert !file.getName().contains(".");
                     classes.addAll(findClasses(file, packageName + "." + file.getName()));
                 } else if (file.getName().endsWith(".class")) {
                     classes.add(Class.forName(packageName + '.' + file.getName().substring(0, file.getName().length() - 6)));
