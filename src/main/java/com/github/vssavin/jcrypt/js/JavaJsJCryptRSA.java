@@ -34,10 +34,12 @@ public class JavaJsJCryptRSA extends JsJCryptEngine {
         Cipher rsaCipher1;
 
         try {
-            rsaCipher1 = Cipher.getInstance("RSA/ECB/OAEPWITHSHA-256ANDMGF1PADDING");
+            //Using "RSA" algorithm instead of "RSA/ECB/OAEPWITHSHA-256ANDMGF1PADDING"
+            //because there is no way to use it in "jsencrypt.js"
+            rsaCipher1 = Cipher.getInstance("RSA");
 
         } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
-            rsaCipher1 = null;
+            throw new IllegalArgumentException("No such algorithm or padding!", e);
         }
 
         rsaCipher = rsaCipher1;
@@ -45,7 +47,7 @@ public class JavaJsJCryptRSA extends JsJCryptEngine {
         try {
             keyFactory1 = KeyFactory.getInstance("RSA");
         } catch (NoSuchAlgorithmException e) {
-            keyFactory1 = null;
+            throw new IllegalArgumentException("No such algorithm!", e);
         }
 
         keyFactory = keyFactory1;
@@ -62,21 +64,17 @@ public class JavaJsJCryptRSA extends JsJCryptEngine {
         }
         key = normalizeKey(key);
 
-        Cipher encryptCipher;
         String encrypted;
         try {
-            encryptCipher = Cipher.getInstance("RSA/ECB/OAEPWITHSHA-256ANDMGF1PADDING");
             EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(Base64.getDecoder().decode(key.getBytes()));
             PublicKey publicKey = keyFactory.generatePublic(publicKeySpec);
             byte[] encryptedBytes;
-            synchronized (encryptCipher) {
-                encryptCipher.init(Cipher.ENCRYPT_MODE, publicKey);
-                encryptedBytes = encryptCipher.doFinal(message.getBytes());
+            synchronized (rsaCipher) {
+                rsaCipher.init(Cipher.ENCRYPT_MODE, publicKey);
+                encryptedBytes = rsaCipher.doFinal(message.getBytes());
             }
-            byte[] base64 = Base64.getEncoder().encode(encryptedBytes);
+            encrypted = Base64.getEncoder().encodeToString(encryptedBytes);
             Arrays.fill(encryptedBytes, (byte) 0);
-            encrypted = new String(base64);
-            Arrays.fill(base64, (byte) 0);
 
         } catch (Exception e) {
             throw new JsEncryptionException("Encryption error!", e);
