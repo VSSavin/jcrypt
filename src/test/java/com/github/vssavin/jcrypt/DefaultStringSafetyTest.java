@@ -9,7 +9,7 @@ import org.junit.Test;
 public class DefaultStringSafetyTest {
 
     @Test
-    public void clearStringTest() {
+    public void shouldNotEqualsBeforeAndAfterClearString() {
         StringSafety stringSafety = new DefaultStringSafety();
         String testString1 = "test";
         @SuppressWarnings("StringBufferReplaceableByString")

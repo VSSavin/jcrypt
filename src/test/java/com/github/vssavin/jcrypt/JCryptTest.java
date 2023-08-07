@@ -16,12 +16,12 @@ import java.util.Base64;
 import java.util.UUID;
 
 /**
- * @author vssavin on 02.08.2023
+ * @author vssavin on 04.08.2023
  */
 public class JCryptTest {
 
     @Test
-    public void aesEncryptDecryptTest() {
+    public void aesShouldEqualsDecryptedAndSourceMessage() {
         JCrypt aes = new JsJCryptAES(str -> {
         });
 
@@ -39,7 +39,7 @@ public class JCryptTest {
     }
 
     @Test
-    public void rsaEncryptDecryptTest() {
+    public void rsaShouldEqualsDecryptedAndSourceMessage() {
         JCrypt rsa = new JavaJsJCryptRSA(str -> {
         });
 
@@ -57,7 +57,7 @@ public class JCryptTest {
     }
 
     @Test
-    public void stubEncryptDecryptTest() {
+    public void stubShouldEqualsEncryptedAndSourceMessage() {
         JCrypt stub = new JsJCryptStub(str -> {
         });
 

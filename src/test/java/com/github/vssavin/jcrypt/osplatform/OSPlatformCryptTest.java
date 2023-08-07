@@ -5,10 +5,13 @@ import com.github.vssavin.jcrypt.JKeyStorage;
 import org.junit.Assert;
 import org.junit.Test;
 
+/**
+ * @author vssavin on 04.08.2023
+ */
 public class OSPlatformCryptTest {
 
     @Test
-    public void defaultPlatformStorageTest() {
+    public void defaultPlatformStorageShouldEqualsDecryptedAndSourceMessage() {
         String message = "test message";
         JKeyStorage platformStorage = new DefaultPlatformStorage();
         String key = platformStorage.getPublicKey();
@@ -20,7 +23,7 @@ public class OSPlatformCryptTest {
     }
 
     @Test
-    public void windowsPlatformStorageTest() {
+    public void windowsPlatformStorageShouldEqualsDecryptedAndSourceMessage() {
         String message = "test message";
         JKeyStorage platformStorage;
         String key;
@@ -40,7 +43,7 @@ public class OSPlatformCryptTest {
     }
 
     @Test
-    public void linuxPlatformStorageTest() {
+    public void linuxPlatformStorageShouldEqualsDecryptedAndSourceMessage() {
         String message = "test message";
         JKeyStorage platformStorage;
         String key;
@@ -58,5 +61,4 @@ public class OSPlatformCryptTest {
 
         Assert.assertEquals(message, decrypted);
     }
-
 }
