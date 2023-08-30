@@ -1,5 +1,6 @@
 package com.github.vssavin.jcrypt.js;
 
+import com.github.vssavin.jcrypt.DefaultStringSafety;
 import com.github.vssavin.jcrypt.StringSafety;
 
 /**
@@ -12,7 +13,7 @@ public class JsJCryptStub extends JsJCryptEngine {
     }
 
     public JsJCryptStub() {
-        super();
+        this(new DefaultStringSafety());
     }
 
     @Override
