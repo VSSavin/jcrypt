@@ -4,10 +4,7 @@ import com.github.vssavin.jcrypt.DefaultStringSafety;
 import com.github.vssavin.jcrypt.JCrypt;
 import com.github.vssavin.jcrypt.StringSafety;
 
-import javax.script.Invocable;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
+import javax.script.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,7 +18,7 @@ import java.util.Objects;
  * @author vssavin on 03.08.2023
  */
 public abstract class JsJCryptEngine implements JCrypt, JsCryptCompatible {
-    protected final ScriptEngine engine = new ScriptEngineManager().getEngineByExtension("js");
+    protected final ScriptEngine engine;
     protected final StringSafety stringSafety;
 
     protected List<String> scriptsList = new ArrayList<>();
@@ -30,11 +27,30 @@ public abstract class JsJCryptEngine implements JCrypt, JsCryptCompatible {
 
     protected JsJCryptEngine(StringSafety stringSafety) {
         this.stringSafety = stringSafety;
+        this.engine = initEngine();
         init();
     }
 
     protected JsJCryptEngine() {
         this.stringSafety = new DefaultStringSafety();
+        this.engine = initEngine();
+    }
+
+    private ScriptEngine initEngine() {
+        ScriptEngineManager engineManager = new ScriptEngineManager();
+        ScriptEngine scriptEngine = engineManager.getEngineByExtension("js");
+
+        if (scriptEngine != null) {
+            return scriptEngine;
+        }
+
+        List<ScriptEngineFactory> factories = engineManager.getEngineFactories();
+        if (!factories.isEmpty()) {
+            return factories.get(0).getScriptEngine();
+        }
+
+        return new StubbedScriptEngine();
+
     }
 
     private void init() {
